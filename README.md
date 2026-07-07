@@ -1,4 +1,5 @@
-deplyed link: https://promptwars-hackathon.vercel.app/
+deployed link: https://promptwars-hackathon.vercel.app/
+
 🌟 Overview
 
 Smart Bharat AI is an AI-powered digital governance platform designed to simplify the way citizens interact with government services.
