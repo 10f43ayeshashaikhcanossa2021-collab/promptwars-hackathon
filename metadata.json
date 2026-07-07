@@ -1,0 +1,12 @@
+{
+  "name": "Smart Bharat AI",
+  "description": "Smart Bharat AI is India's Intelligent Digital Civic Companion, offering AI-powered citizen services, scheme recommendations, civic complaint tracking, smart document verification, and multilingual voice support.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
