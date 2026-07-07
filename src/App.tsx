@@ -28,10 +28,30 @@ function AppContent() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [authOpen, setAuthOpen] = useState<boolean>(false);
   const [highContrast, setHighContrast] = useState<boolean>(false);
+  const [initialQuery, setInitialQuery] = useState<string>("");
   const [notifications, setNotifications] = useState<string[]>([
     "Welcome to Smart Bharat AI sandbox node. AES-256 state database active.",
     "Bilingual support activated for 11 regional Indian languages."
   ]);
+
+  const handleUniversalSearch = (query: string) => {
+    const q = query.toLowerCase();
+    
+    if (q.includes("pothole") || q.includes("garbage") || q.includes("streetlight") || q.includes("water leak") || q.includes("drainage") || q.includes("construction") || q.includes("civic") || q.includes("complaint") || q.includes("road")) {
+      addNotification(`Universal Search: Routing to Civic Issue reporting console for "${query}"`);
+      setCurrentTab("complaints");
+    } else if (q.includes("scheme") || q.includes("scholarship") || q.includes("pension") || q.includes("kisan") || q.includes("ayushman") || q.includes("matching") || q.includes("match") || q.includes("pm kisan") || q.includes("pension") || q.includes("widow")) {
+      addNotification(`Universal Search: Routing to Scheme Recommendation engine for "${query}"`);
+      setCurrentTab("schemes");
+    } else if (q.includes("locker") || q.includes("document") || q.includes("aadhaar") || q.includes("pan") || q.includes("passport") || q.includes("driving license") || q.includes("ocr") || q.includes("election") || q.includes("birth certificate")) {
+      addNotification(`Universal Search: Routing to DigiLocker secure vault for "${query}"`);
+      setCurrentTab("locker");
+    } else {
+      addNotification(`Universal Search: Directing query to Smart AI Assistant`);
+      setInitialQuery(query);
+      setCurrentTab("chat");
+    }
+  };
 
   const addNotification = (msg: string) => {
     setNotifications(prev => [msg, ...prev].slice(0, 8));
@@ -142,6 +162,7 @@ function AppContent() {
           <div className="transition-all duration-300">
             {currentTab === "home" && (
               <LandingPage
+                user={user}
                 onGetStarted={() => {
                   if (user) {
                     setCurrentTab("dashboard");
@@ -158,6 +179,7 @@ function AppContent() {
                     setCurrentTab(tab);
                   }
                 }}
+                onSearch={handleUniversalSearch}
               />
             )}
 
@@ -166,6 +188,8 @@ function AppContent() {
                 user={user}
                 highContrast={highContrast}
                 addNotification={addNotification}
+                initialQuery={initialQuery}
+                onClearInitialQuery={() => setInitialQuery("")}
               />
             )}
 

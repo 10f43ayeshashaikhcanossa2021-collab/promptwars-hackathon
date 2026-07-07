@@ -28,12 +28,16 @@ interface AIChatbotProps {
   user: UserProfile | null;
   highContrast: boolean;
   addNotification: (msg: string) => void;
+  initialQuery?: string;
+  onClearInitialQuery?: () => void;
 }
 
 export const AIChatbot: React.FC<AIChatbotProps> = ({
   user,
   highContrast,
-  addNotification
+  addNotification,
+  initialQuery,
+  onClearInitialQuery
 }) => {
   const { language, t } = useLanguage();
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -149,19 +153,29 @@ export const AIChatbot: React.FC<AIChatbotProps> = ({
     }
   };
 
-  const handleSendMessage = async (e?: React.FormEvent) => {
+  useEffect(() => {
+    if (initialQuery) {
+      handleSendMessage(undefined, initialQuery);
+      if (onClearInitialQuery) onClearInitialQuery();
+    }
+  }, [initialQuery]);
+
+  const handleSendMessage = async (e?: React.FormEvent, queryOverride?: string) => {
     if (e) e.preventDefault();
-    if (!inputText.trim()) return;
+    const activeText = queryOverride || inputText;
+    if (!activeText.trim()) return;
 
     const userMsg: ChatMessage = {
       id: `m-${Date.now()}`,
       sender: "user",
-      text: inputText,
+      text: activeText,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
 
     setMessages(prev => [...prev, userMsg]);
-    setInputText("");
+    if (!queryOverride) {
+      setInputText("");
+    }
     setLoading(true);
 
     try {
